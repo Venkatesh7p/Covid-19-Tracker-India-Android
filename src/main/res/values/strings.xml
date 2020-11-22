@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Covid-19 Tracker</string>
+    <string name="show_state_record">Show state Record</string>
+    <string name="state_record">State wise Record</string>
+    <string name="state_wise_record_label">Showing State Wise Record</string>
+    <string name="slogan">Stay Safe, Stay Healthy</string>
+    <string name="data_records"><u>Data Records :</u></string>
+    <string name="about">About</string>
+    <string name="changes_in_recovery_cases">Changes in Recovery Cases :</string>
+    <string name="changes_in_death_cases">Changes in Death Cases :</string>
+    <string name="akhilesh_garg">© Akhilesh Garg</string>
+</resources>
