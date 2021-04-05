@@ -1,5 +1,6 @@
 package com.akgarg.covid19tracker;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +14,13 @@ import java.util.ArrayList;
 
 class StateRecordsAdapter extends RecyclerView.Adapter<StateRecordsAdapter.StateViewHolder> {
     private static int color = 1;
-    private static final String TAG = "StateRecordsAdapter";
-    private ArrayList<StateRecordFields> list;
+    private final ArrayList<StateRecordFields> list;
 
     public StateRecordsAdapter(ArrayList<StateRecordFields> list) {
         this.list = list;
     }
 
-
-    public class StateViewHolder extends RecyclerView.ViewHolder {
+    protected static class StateViewHolder extends RecyclerView.ViewHolder {
         Button stateRecordButton;
 
         public StateViewHolder(@NonNull View itemView) {
@@ -29,7 +28,6 @@ class StateRecordsAdapter extends RecyclerView.Adapter<StateRecordsAdapter.State
             stateRecordButton = itemView.findViewById(R.id.state_record_button);
         }
     }
-
 
     @NonNull
     @Override
@@ -39,6 +37,7 @@ class StateRecordsAdapter extends RecyclerView.Adapter<StateRecordsAdapter.State
         return new StateViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull StateViewHolder holder, int position) {
         if (color == 7) {
@@ -56,7 +55,7 @@ class StateRecordsAdapter extends RecyclerView.Adapter<StateRecordsAdapter.State
                 holder.stateRecordButton.setBackgroundColor(Color.CYAN);
                 break;
             case 4:
-                holder.stateRecordButton.setBackgroundColor(Color.LTGRAY);
+                holder.stateRecordButton.setBackgroundColor(Color.GRAY);
                 break;
             case 5:
                 holder.stateRecordButton.setBackgroundColor(Color.rgb(218, 165, 32));
@@ -65,11 +64,11 @@ class StateRecordsAdapter extends RecyclerView.Adapter<StateRecordsAdapter.State
                 holder.stateRecordButton.setBackgroundColor(Color.rgb(91, 89, 81));
         }
 
-        holder.stateRecordButton.setText("\nName : " + list.get(position).getState() +
-                "\nActive Cases : " + list.get(position).getActive() +
-                "\nConfirmed : " + list.get(position).getConfirmed() +
-                "\nRecovered : " + list.get(position).getRecovered() +
-                "\nDeaths : " + list.get(position).getDeaths() + "\n");
+        holder.stateRecordButton.setText("\nName : " + list.get(position).getStateName() +
+                "\nActive Cases : " + list.get(position).getActiveCases() +
+                "\nConfirmed : " + list.get(position).getConfirmedCases() +
+                "\nRecovered : " + list.get(position).getRecoveredCases() +
+                "\nDeaths : " + list.get(position).getTotalDeceased() + "\n");
     }
 
     @Override

@@ -1,49 +1,61 @@
 package com.akgarg.covid19tracker;
 
+@SuppressWarnings("all")
 public class StateRecordFields {
-    private String state;
-    private int active;
-    private int confirmed;
-    private int recovered;
-    private int deaths;
+    private String stateName;
+    private int activeCases;
+    private int confirmedCases;
+    private int recoveredCases;
+    private int totalDeceased;
 
-    String getState() {
-        return state;
+    String getStateName() {
+        return stateName;
     }
 
-    void setState(String state) {
-        this.state = state;
+    void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 
-    int getActive() {
-        return active;
+    int getActiveCases() {
+        return activeCases;
     }
 
-    void setActive(int active) {
-        this.active = active;
+    void setActiveCases(int activeCases) {
+        this.activeCases = activeCases;
     }
 
-    int getConfirmed() {
-        return confirmed;
+    int getConfirmedCases() {
+        return confirmedCases;
     }
 
-    void setConfirmed(int confirmed) {
-        this.confirmed = confirmed;
+    void setConfirmedCases(int confirmedCases) {
+        this.confirmedCases = confirmedCases;
     }
 
-    int getRecovered() {
-        return recovered;
+    int getRecoveredCases() {
+        return recoveredCases;
     }
 
-    void setRecovered(int recovered) {
-        this.recovered = recovered;
+    void setRecoveredCases(int recoveredCases) {
+        this.recoveredCases = recoveredCases;
     }
 
-    int getDeaths() {
-        return deaths;
+    int getTotalDeceased() {
+        return totalDeceased;
     }
 
-    void setDeaths(int deaths) {
-        this.deaths = deaths;
+    void setTotalDeceased(int totalDeceased) {
+        this.totalDeceased = totalDeceased;
+    }
+
+    @Override
+    public String toString() {
+        return "StateRecordFields{" +
+                "state='" + stateName + '\'' +
+                ", active=" + activeCases +
+                ", confirmed=" + confirmedCases +
+                ", recovered=" + recoveredCases +
+                ", deaths=" + totalDeceased +
+                '}';
     }
 }

@@ -1,9 +1,9 @@
 package com.akgarg.covid19tracker;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,9 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -23,12 +21,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class StateWiseRecord extends AppCompatActivity {
-    private static final String TAG = "errorcheck";
     private RecyclerView recyclerView;
     private StateRecordsAdapter adapter;
     private ArrayList<StateRecordFields> stateRecords;
-
-    private static final String dataURL = "https://api.covidindiatracker.com/state_data.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,35 +43,33 @@ public class StateWiseRecord extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String apiUrl = "https://api.apify.com/v2/key-value-stores/toDWvRj1JpTXiM8FF/records/LATEST?disableRedirect=true";
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, dataURL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject object = response.getJSONObject(i);
-                        StateRecordFields recordFields = new StateRecordFields();
-                        recordFields.setState(object.getString("state"));
-                        recordFields.setActive(object.getInt("active"));
-                        recordFields.setConfirmed(object.getInt("confirmed"));
-                        recordFields.setRecovered(object.getInt("recovered"));
-                        recordFields.setDeaths(object.getInt("deaths"));
-                        stateRecords.add(recordFields);
-                    }
-                    adapter = new StateRecordsAdapter(stateRecords);
-                    recyclerView.setAdapter(adapter);
-                    progressBar.setVisibility(View.INVISIBLE);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, apiUrl, null, response -> {
+            // populating data of state wise record
+            try {
+                JSONArray regionData = response.getJSONArray("regionData");
+
+                for (int i = 0; i < regionData.length(); i++) {
+                    JSONObject object = regionData.getJSONObject(i);
+                    StateRecordFields recordFields = new StateRecordFields();
+                    recordFields.setStateName(object.getString("region"));
+                    recordFields.setActiveCases(object.getInt("totalInfected"));
+                    recordFields.setConfirmedCases(object.getInt("totalInfected") + object.getInt("recovered") + object.getInt("deceased"));
+                    recordFields.setRecoveredCases(object.getInt("recovered"));
+                    recordFields.setTotalDeceased(object.getInt("deceased"));
+                    stateRecords.add(recordFields);
                 }
+                adapter = new StateRecordsAdapter(stateRecords);
+                recyclerView.setAdapter(adapter);
+                progressBar.setVisibility(View.INVISIBLE);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(StateWiseRecord.this, "Error fetching data", Toast.LENGTH_LONG).show();
-            }
+        }, error -> {
+            Log.d("TAG", "onErrorResponse: error -> " + error);
+            progressBar.setVisibility(ProgressBar.INVISIBLE);
         });
-
-        requestQueue.add(request);
+        requestQueue.add(objectRequest);
     }
 }
